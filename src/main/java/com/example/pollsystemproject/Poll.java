@@ -42,17 +42,12 @@ public class Poll  implements Serializable {
     public void setId() {
         final String letterStr = "ABCDEFGHJKMNPQRSTVWXYZ";
         final String numStr = "0123456789";
+        String[] choices = {letterStr, numStr};
         String newId = "";
         for(int i = 0; i < 10; i++) {
             SecureRandom rand = new SecureRandom();
-            String str;
             int strIdx = rand.nextInt(2);
-            if (strIdx == 0) {
-                str = letterStr;
-            } else {
-                str = numStr;
-            }
-            newId += getRandomChar(str);
+            newId += getRandomChar(choices[strIdx]);
         }
         this.id = newId;
     }
@@ -113,6 +108,7 @@ public class Poll  implements Serializable {
             this.setQuestion(question);
             this.setPoll_status(status.created);
             this.setChoice(choice);
+            this.setId();
         }else {
             throw new Exception("<h3>Error! You already created one poll!</h3>");
         }
