@@ -8,11 +8,13 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.security.SecureRandom;
 
 
 
 
 public class Poll  implements Serializable {
+    private String id;
     private String title;
     private String question;
     private status poll_status;
@@ -28,6 +30,33 @@ public class Poll  implements Serializable {
         vote = new Hashtable<>();
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public char getRandomChar(String str) {
+        SecureRandom rand = new SecureRandom();
+        return str.charAt(rand.nextInt(str.length()));
+    }
+
+    public void setId() {
+        final String letterStr = "ABCDEFGHJKMNPQRSTVWXYZ";
+        final String numStr = "0123456789";
+        String newId = "";
+        for(int i = 0; i < 10; i++) {
+            SecureRandom rand = new SecureRandom();
+            String str;
+            int strIdx = rand.nextInt(2);
+            if (strIdx == 0) {
+                str = letterStr;
+            } else {
+                str = numStr;
+            }
+            newId += getRandomChar(str);
+        }
+        this.id = newId;
+    }
+    
     public String getTitle() {
         return title;
     }
