@@ -45,7 +45,7 @@ public class Poll implements Serializable {
         return PIN;
     }
 
-    public void setId() {
+    public void genId() {
         final String letterStr = "ABCDEFGHJKMNPQRSTVWXYZ";
         final String numStr = "0123456789";
         String[] choices = { letterStr, numStr };
@@ -57,7 +57,9 @@ public class Poll implements Serializable {
         }
         this.id = newId;
     }
-
+    public void setID(String id) {
+        this.id = id;
+    }
     public String getTitle() {
         return title;
     }
@@ -114,7 +116,7 @@ public class Poll implements Serializable {
             this.setQuestion(question);
             this.setPoll_status(status.created);
             this.setChoice(choice);
-            this.setId();
+            this.genId();
         } else {
             throw new Exception("<h3>Error! You already created one poll!</h3>");
         }
