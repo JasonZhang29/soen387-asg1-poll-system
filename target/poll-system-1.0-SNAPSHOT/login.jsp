@@ -26,10 +26,15 @@
 
 <main class="form-signin">
 <%--    sign in form    --%>
+    <h2 class="h3 mb-3 fw-normal"> Sign in </h2>
     <form action="Login" method="post">
-        <h1 class="h3 mb-3 fw-normal"> Enter password: </h1>
+        <label for="user_id" class="h3 mb-3 fw-normal">User ID:</label>
         <div class="form-floating">
-            <input type="password" class="form-control" name="pass" placeholder="password" required><br>
+        <input type="text" class="form-control" id="user_id" name="user_id" placeholder="ID" required><br>
+        </div>
+        <label for="pass" class="h3 mb-3 fw-normal">Password:</label>
+        <div class="form-floating">
+            <input type="password" class="form-control" id="pass" name="pass" placeholder="password" required><br>
         </div>
         <input class="w-100 btn btn-lg btn-primary" type="submit" value="login">
     </form>
