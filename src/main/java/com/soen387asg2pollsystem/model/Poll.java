@@ -124,13 +124,16 @@ public class Poll implements Serializable {
         this.releaseDate = date;
     }
 
-    public void create_Poll(String title, String question, ArrayList<String> choice) throws Exception {
+    public void create_Poll(int userid, String title, String question, ArrayList<String> choice) throws Exception {
         if(this.getPoll_status()==null){
+            this.setUserid(userid);
             this.setTitle(title);
             this.setQuestion(question);
             this.setPoll_status(status.created);
             this.setChoice(choice);
             this.genId();
+            LocalDateTime ldt = LocalDateTime.now();
+            this.setReleaseDate(ldt);
         }else {
             throw new Exception("<h3>Error! You already created one poll!</h3>");
         }

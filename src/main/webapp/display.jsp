@@ -1,5 +1,4 @@
 <%@ page import="com.soen387asg2pollsystem.model.Poll" %>
-<%@ page import="com.soen387asg2pollsystem.db.DBConnection" %>
 <%@ page import="com.soen387asg2pollsystem.daoimpl.PollDaoImpl" %>
 <%@ page import="java.io.PrintWriter" %>
 <%@ page import="java.sql.Connection" %>
@@ -47,25 +46,36 @@
 %>
 <h2>Display the current Poll</h2>
 
-<%--    <%--%>
-<%--        if("post".equalsIgnoreCase(request.getMethod()) && request.getParameter("create")!=null){--%>
+    <%
+        PrintWriter pw = response.getWriter();
+        if("post".equalsIgnoreCase(request.getMethod()) && request.getParameter("create")!=null){
 
-<%--                String title=request.getParameter("title");--%>
-<%--                String question=request.getParameter("question");--%>
-<%--                String[] choices = new String[3];--%>
-<%--                String choice1 = request.getParameter("choice1");--%>
-<%--                String choice2 = request.getParameter("choice2");--%>
-<%--                String choice3 = request.getParameter("choice3");--%>
-<%--                choices[0] = choice1;--%>
-<%--                choices[1] = choice2;--%>
-<%--                choices[2] = choice3;--%>
-<%--                p.create_Poll(title,question,choices);--%>
+                String title=request.getParameter("title");
+                String question=request.getParameter("question");
+                ArrayList<String> choices = new ArrayList<>();
+                String choice1 = request.getParameter("choice1");
+                String choice2 = request.getParameter("choice2");
+                String choice3 = request.getParameter("choice3");
+                choices.add(choice1);
+                choices.add(choice2);
+                choices.add(choice3);
+                Poll cp = new Poll();
+                int userid = (int) session.getAttribute("userid");
+                cp.create_Poll(userid,title,question,choices);
+                pw.println(cp.getId());
+            pw.println(cp.getReleaseDate());
+            pw.println(cp.getChoice());
+            pw.println(cp.getVote());
+                PollDaoImpl pollDaoimpl = new PollDaoImpl();
+                pollDaoimpl.insertPoll(cp);
+                pollDaoimpl.insertChoice(cp);
 
-<%--        }--%>
 
-<%--    %>--%>
+        }
 
-<%--    <%--%>
+    %>
+
+<%--    &lt;%&ndash;%>
 <%--        if("post".equalsIgnoreCase(request.getMethod()) && request.getParameter("update")!=null){--%>
 
 <%--        String title=request.getParameter("title");--%>
@@ -81,25 +91,25 @@
 
 <%--        }--%>
 <%--    %>--%>
-<%--    <%--%>
+<%--    &lt;%&ndash;%>
 <%--        if("post".equalsIgnoreCase(request.getMethod()) && request.getParameter("run")!=null){--%>
 
 <%--        p.run_Poll();--%>
 <%--        }--%>
 <%--    %>--%>
-<%--    <%--%>
+<%--    &lt;%&ndash;%>
 <%--        if("post".equalsIgnoreCase(request.getMethod()) && request.getParameter("release")!=null){--%>
 
 <%--                p.release_Poll();--%>
 <%--        }--%>
 <%--    %>--%>
-<%--    <%--%>
+<%--    &lt;%&ndash;%>
 <%--        if("post".equalsIgnoreCase(request.getMethod()) && request.getParameter("unrelease")!=null){--%>
 <%--                p.unrelease_Poll();--%>
 <%--        }--%>
 <%--    %>--%>
 
-<%--    <%--%>
+<%--    &lt;%&ndash;%>
 <%--        if("post".equalsIgnoreCase(request.getMethod()) && request.getParameter("clear")!=null){--%>
 
 <%--                p.clear_Poll();--%>
@@ -107,7 +117,7 @@
 <%--%>--%>
 
 
-<%--    <%--%>
+<%--    &lt;%&ndash;%>
 <%--        if("post".equalsIgnoreCase(request.getMethod()) && request.getParameter("close")!=null){--%>
 <%--                 p.close_Poll();--%>
 <%--                 RequestDispatcher rd = request.getRequestDispatcher("create.jsp");--%>
@@ -121,7 +131,7 @@
             PollDaoImpl pollDao = new PollDaoImpl();
             Set<Poll> poll_array = pollDao.getAllPoll(user_id);
             //Poll p = pollDao.getPoll("0000000000");
-            PrintWriter pw = response.getWriter();
+
 
         %>
         <div class="col-md-7 col-lg-8">
@@ -204,7 +214,7 @@
                 </tr>
             </table>
 
-<%--            <%--%>
+<%--            &lt;%&ndash;%>
 <%--                if(p.getPoll_status() == Poll.status.released){--%>
 <%--                    Enumeration<String> keys = p.get_Poll_Result().keys();--%>
 <%--                    String[] choices = new String[3];--%>
@@ -237,7 +247,7 @@
 <%--            </script>--%>
 <%--            <div id="donutchart" style="width: 900px; height: 500px;"></div>--%>
 
-<%--            <%--%>
+<%--            &lt;%&ndash;%>
 <%--                }--%>
 <%--            %>--%>
 

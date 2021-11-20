@@ -11,6 +11,7 @@ public interface PollDAO {
     Set<Poll> getAllPoll(int user_id);
 
     boolean insertPoll(Poll poll);
+    boolean insertChoice(Poll poll);
 
     boolean updatePoll(Poll poll);
 

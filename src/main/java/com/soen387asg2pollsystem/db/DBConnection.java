@@ -58,7 +58,7 @@ public class DBConnection {
             //Register JDBC driver
             Class.forName(JDBC_DRIVER);
             //Open a connection
-            System.out.println("Connecting to database...");
+            //System.out.println("Connecting to database...");
             conn = DriverManager.getConnection(DB_URL+DB_POLL_NAME,DB_USER,DB_PASSWORD);
             return conn;
         } catch (SQLException e){
