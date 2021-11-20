@@ -1,5 +1,5 @@
 package com.example.pollsystemproject.model;
-
+import java.security.MessageDigest;
 public class User {
 
         private int userId;
@@ -7,7 +7,7 @@ public class User {
         private String lastName;
         private String email;
         private String password;
-
+        private String hash;
 
         public User(){
 
@@ -19,6 +19,7 @@ public class User {
             this.lastName = lastName;
             this.email = email;
             this.password = password;
+            hashPassword(password);
         }
 
         public int getUserId() {
@@ -53,8 +54,22 @@ public class User {
             return password;
         }
 
+        public String getHash() { return hash; }
+
         public void setPassword(String password) {
             this.password = password;
+        }
+
+        public void hashPassword(String password) {
+            try {
+                byte[] bytesOfMessage = password.getBytes("UTF-8");
+                MessageDigest md = MessageDigest.getInstance("MD5");
+                byte[] hash = md.digest(bytesOfMessage);
+                this.hash = String.format("%1$032X", hash);
+            }
+            catch(Exception e) {
+                e.printStackTrace();
+            }
         }
 
     @Override
@@ -64,7 +79,7 @@ public class User {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
+                ", hashed password='" + hash + '\'' +
                 '}';
     }
 }
