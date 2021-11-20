@@ -1,6 +1,14 @@
-<%@ page import="java.util.Enumeration" %>
-<%@ page import="java.util.Hashtable" %>
 <%@ page import="com.soen387asg2pollsystem.model.Poll" %>
+<%@ page import="com.soen387asg2pollsystem.db.DBConnection" %>
+<%@ page import="com.soen387asg2pollsystem.daoimpl.PollDaoImpl" %>
+<%@ page import="java.io.PrintWriter" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.Statement" %>
+<%@ page import="java.sql.ResultSet" %>
+<%@ page import="java.sql.SQLException" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
+<%@ page import="java.time.LocalDateTime" %>
+<%@ page import="java.util.*" %>
 <%--
   Created by IntelliJ IDEA.
   User: liuhe
@@ -106,6 +114,16 @@
 <%--                 rd.forward(request,response);--%>
 <%--        }--%>
 <%--    %>--%>
+
+        <%
+
+            int user_id = (int) session.getAttribute("userid");
+            PollDaoImpl pollDao = new PollDaoImpl();
+            Set<Poll> poll_array = pollDao.getAllPoll(user_id);
+            //Poll p = pollDao.getPoll("0000000000");
+            PrintWriter pw = response.getWriter();
+
+        %>
         <div class="col-md-7 col-lg-8">
             <table id="tbl-student" class="table table-responsive table-bordered" cellpadding = "0" width="100%">
                 <thead>
@@ -119,18 +137,25 @@
                     <th>Poll ID</th>
                 </tr>
                 </thead>
-<%--                <tr>--%>
-<%--                    <td><%=p.getTitle()%> </td>--%>
-<%--                    <td><%=p.getQuestion()%>  </td>--%>
+                <%
+                    for (Poll p : poll_array)
+                    {
 
-<%--                    <td><%=p.getChoice()[0]%></td>--%>
-<%--                    <td><%=p.getChoice()[1]%></td>--%>
-<%--                    <td><%=p.getChoice()[2]%></td>--%>
-<%--                    <td style="color:darkgreen"><%=p.getPoll_status()%> </td>--%>
-<%--                    <td style="color:darkred"><%=p.getId()%></td>--%>
+                %>
+                <tr>
+                    <td><%=p.getTitle()%> </td>
+                    <td><%=p.getQuestion()%> </td>
+                    <td><%=p.getChoice().get(0)%></td>
+                    <td><%=p.getChoice().get(1)%></td>
+                    <td><%=p.getChoice().get(2)%></td>
+                    <td style="color:darkgreen"><%=p.getPoll_status()%> </td>
+                    <td style="color:darkred"><%=p.getId()%></td>
+                </tr>
 
+                <%
 
-
+                    }
+                %>
 
             </table>
 

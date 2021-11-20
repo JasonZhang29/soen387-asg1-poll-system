@@ -15,6 +15,7 @@ import java.util.Hashtable;
 
 public class Poll implements Serializable {
     private String id;
+    private int userid;
     private String title;
     private String question;
     private status poll_status;
@@ -30,12 +31,30 @@ public class Poll implements Serializable {
         vote = new Hashtable<>();
     }
 
+    public Poll(String id, String title, String question, status poll_status, ArrayList<String> choice, Hashtable<String, String> vote, LocalDateTime releaseDate) {
+        this.id = id;
+        this.title = title;
+        this.question = question;
+        this.poll_status = poll_status;
+        this.choice = choice;
+        this.vote = vote;
+        this.releaseDate = releaseDate;
+    }
+
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public int getUserid() {
+        return userid;
+    }
+
+    public void setUserid(int userid) {
+        this.userid = userid;
     }
 
     public char getRandomChar(String str) {
