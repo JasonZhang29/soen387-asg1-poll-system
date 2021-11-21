@@ -17,7 +17,7 @@
 <p style="color: red">Sorry an error occurred!</p>
 <%=exception.getMessage() %>
 <div align = "center">
-    <p><a href="display.jsp">Click Back</a> </p>
+    <p><a href="index.jsp">Click Back</a> </p>
 </div>
 
 </body>

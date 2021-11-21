@@ -24,7 +24,7 @@ public class Poll implements Serializable {
     private LocalDateTime releaseDate;
 
     public enum status{
-        created,running,released
+        created,running,released,closed
     }
 
     public Poll(){
@@ -124,7 +124,7 @@ public class Poll implements Serializable {
         this.releaseDate = date;
     }
 
-    public void create_Poll(int userid, String title, String question, ArrayList<String> choice) throws Exception {
+    public void create_Poll(int userid, String title, String question, ArrayList<String> choice)  {
         if(this.getPoll_status()==null){
             this.setUserid(userid);
             this.setTitle(title);
@@ -134,8 +134,6 @@ public class Poll implements Serializable {
             this.genId();
             LocalDateTime ldt = LocalDateTime.now();
             this.setReleaseDate(ldt);
-        }else {
-            throw new Exception("<h3>Error! You already created one poll!</h3>");
         }
 
 
@@ -164,6 +162,8 @@ public class Poll implements Serializable {
         }
 
     }
+
+
 
     public void close_Poll() throws Exception {
         if(this.getPoll_status()== status.released)
@@ -236,7 +236,7 @@ public class Poll implements Serializable {
     public String download_Poll_Details(PrintWriter output, String filename)  {
         LocalDateTime date = this.getReleaseDate();
         String question = this.getQuestion();
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String formattedDate = date.format(dtf);
         filename = filename + "-" + formattedDate + ".txt";
 

@@ -29,16 +29,18 @@
 <div class="mid">
     <main class = "form-signin">
         <h2 class="h3 mb-3 fw-normal">Welcome, You are:</h2>
-<%--        <%--%>
-<%--            if ("post".equalsIgnoreCase(request.getMethod()) && request.getParameter("exit")!=null){--%>
-<%--                session.removeAttribute("sessionId");--%>
-<%--                session.removeAttribute("poll");--%>
-<%--                request.changeSessionId();--%>
-<%--                //out.println(session.getId());--%>
-<%--            }--%>
-<%--        %>--%>
+        <%
+            if ("post".equalsIgnoreCase(request.getMethod()) && request.getParameter("exit")!=null){
+                session.removeAttribute("poll_id");
+                session.removeAttribute("pin");
+                session.removeAttribute("p_vote");
+                session.removeAttribute("successful");
+                request.changeSessionId();
+                //out.println(session.getId());
+            }
+        %>
         <div class="form-floating">
-            <button class="w-100 btn btn-lg btn-primary" onclick="window.location.href='vote.jsp'"> User </button>
+            <button class="w-100 btn btn-lg btn-primary" onclick="window.location.href='welcome.jsp'"> User </button>
             <button class="w-100 btn btn-lg btn-secondary" onclick="window.location.href='login.jsp'"> Manager </button>
         </div>
     </main>

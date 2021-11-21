@@ -1,6 +1,13 @@
-<%@ page import="java.util.Enumeration" %>
-<%@ page import="java.util.Hashtable" %>
 <%@ page import="com.soen387asg2pollsystem.model.Poll" %>
+<%@ page import="com.soen387asg2pollsystem.daoimpl.PollDaoImpl" %>
+<%@ page import="java.io.PrintWriter" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.Statement" %>
+<%@ page import="java.sql.ResultSet" %>
+<%@ page import="java.sql.SQLException" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
+<%@ page import="java.time.LocalDateTime" %>
+<%@ page import="java.util.*" %>
 <%--
   Created by IntelliJ IDEA.
   User: liuhe
@@ -39,73 +46,154 @@
 %>
 <h2>Display the current Poll</h2>
 
-<%--    <%--%>
-<%--        if("post".equalsIgnoreCase(request.getMethod()) && request.getParameter("create")!=null){--%>
+<%
+    if("post".equalsIgnoreCase(request.getMethod()) && request.getParameter("update")!=null){
+        String poll_id = request.getParameter("poll_id");
+        String title = request.getParameter("title");
+        String question = request.getParameter("question");
+        ArrayList<String> choices = new ArrayList<>();
+        String choice1 = request.getParameter("choice1");
+        String choice2 = request.getParameter("choice2");
+        String choice3 = request.getParameter("choice3");
+        choices.add(choice1);
+        choices.add(choice2);
+        choices.add(choice3);
 
-<%--                String title=request.getParameter("title");--%>
-<%--                String question=request.getParameter("question");--%>
-<%--                String[] choices = new String[3];--%>
-<%--                String choice1 = request.getParameter("choice1");--%>
-<%--                String choice2 = request.getParameter("choice2");--%>
-<%--                String choice3 = request.getParameter("choice3");--%>
-<%--                choices[0] = choice1;--%>
-<%--                choices[1] = choice2;--%>
-<%--                choices[2] = choice3;--%>
-<%--                p.create_Poll(title,question,choices);--%>
-
-<%--        }--%>
-
-<%--    %>--%>
-
-<%--    <%--%>
-<%--        if("post".equalsIgnoreCase(request.getMethod()) && request.getParameter("update")!=null){--%>
-
-<%--        String title=request.getParameter("title");--%>
-<%--        String question=request.getParameter("question");--%>
-<%--        String[] choices = new String[3];--%>
-<%--        String choice1 = request.getParameter("choice1");--%>
-<%--        String choice2 = request.getParameter("choice2");--%>
-<%--        String choice3 = request.getParameter("choice3");--%>
-<%--        choices[0] = choice1;--%>
-<%--        choices[1] = choice2;--%>
-<%--        choices[2] = choice3;--%>
-<%--        p.update_Poll(title,question,choices);--%>
-
-<%--        }--%>
-<%--    %>--%>
-<%--    <%--%>
-<%--        if("post".equalsIgnoreCase(request.getMethod()) && request.getParameter("run")!=null){--%>
-
-<%--        p.run_Poll();--%>
-<%--        }--%>
-<%--    %>--%>
-<%--    <%--%>
-<%--        if("post".equalsIgnoreCase(request.getMethod()) && request.getParameter("release")!=null){--%>
-
-<%--                p.release_Poll();--%>
-<%--        }--%>
-<%--    %>--%>
-<%--    <%--%>
-<%--        if("post".equalsIgnoreCase(request.getMethod()) && request.getParameter("unrelease")!=null){--%>
-<%--                p.unrelease_Poll();--%>
-<%--        }--%>
-<%--    %>--%>
-
-<%--    <%--%>
-<%--        if("post".equalsIgnoreCase(request.getMethod()) && request.getParameter("clear")!=null){--%>
-
-<%--                p.clear_Poll();--%>
-<%--        }--%>
-<%--%>--%>
+        PollDaoImpl pollDaoimpl = new PollDaoImpl();
+        try{
+            Poll cp = pollDaoimpl.getPoll(poll_id);
+            cp.update_Poll(title,question,choices);
+            if(pollDaoimpl.updatePoll(cp) && pollDaoimpl.updateChoice(cp)){
+                PrintWriter output = response.getWriter();
+                output.println("successful update!");
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+%>
 
 
-<%--    <%--%>
-<%--        if("post".equalsIgnoreCase(request.getMethod()) && request.getParameter("close")!=null){--%>
-<%--                 p.close_Poll();--%>
-<%--                 RequestDispatcher rd = request.getRequestDispatcher("create.jsp");--%>
-<%--                 rd.forward(request,response);--%>
-<%--        }--%>
-<%--    %>--%>
+<%
+        if("post".equalsIgnoreCase(request.getMethod()) && request.getParameter("run")!=null){
+            String poll_id = request.getParameter("poll_id");
+            PollDaoImpl pollDaoimpl = new PollDaoImpl();
+            try{
+                Poll cp = pollDaoimpl.getPoll(poll_id);
+                cp.run_Poll();
+                if(pollDaoimpl.updatePoll(cp)){
+                    PrintWriter output = response.getWriter();
+                    output.println("successful run!");
+                }
+            }
+            catch (SQLException e){
+                e.printStackTrace();
+            }
+        }
+%>
+
+<%
+        if("post".equalsIgnoreCase(request.getMethod()) && request.getParameter("release")!=null){
+            String poll_id = request.getParameter("poll_id");
+            PollDaoImpl pollDaoimpl = new PollDaoImpl();
+            try{
+                Poll cp = pollDaoimpl.getPoll(poll_id);
+                cp.release_Poll();
+                if(pollDaoimpl.updatePoll(cp)){
+                    PrintWriter output = response.getWriter();
+                    output.println("successful release!");
+                }
+            }
+            catch (SQLException e){
+                e.printStackTrace();
+            }
+
+        }
+%>
+<%
+        if("post".equalsIgnoreCase(request.getMethod()) && request.getParameter("unrelease")!=null){
+            String poll_id = request.getParameter("poll_id");
+            PollDaoImpl pollDaoimpl = new PollDaoImpl();
+            try{
+                Poll cp = pollDaoimpl.getPoll(poll_id);
+                cp.unrelease_Poll();
+                if(pollDaoimpl.updatePoll(cp)){
+                    PrintWriter output = response.getWriter();
+                    output.println("successful unrelease!");
+                }
+            }
+            catch (SQLException e){
+                e.printStackTrace();
+            }
+        }
+%>
+
+<%
+        if("post".equalsIgnoreCase(request.getMethod()) && request.getParameter("clear")!=null){
+            String poll_id = request.getParameter("poll_id");
+            PollDaoImpl pollDaoimpl = new PollDaoImpl();
+            try{
+                Poll cp = pollDaoimpl.getPoll(poll_id);
+                cp.clear_Poll();
+                if(pollDaoimpl.updatePoll(cp)){
+                    PrintWriter output = response.getWriter();
+                    output.println("successful clear!");
+                }
+            }
+            catch (SQLException e){
+                e.printStackTrace();
+            }
+        }
+%>
+
+
+<%
+        if("post".equalsIgnoreCase(request.getMethod()) && request.getParameter("close")!=null){
+            String poll_id = request.getParameter("poll_id");
+            PollDaoImpl pollDaoimpl = new PollDaoImpl();
+            try{
+                Poll cp = pollDaoimpl.getPoll(poll_id);
+                cp.setPoll_status(Poll.status.valueOf("closed"));
+                if(pollDaoimpl.updatePoll(cp)){
+                    PrintWriter output = response.getWriter();
+                    output.println("successful close!");
+                }
+            }
+            catch (SQLException e){
+                e.printStackTrace();
+            }
+        }
+%>
+
+<%
+    if("post".equalsIgnoreCase(request.getMethod()) && request.getParameter("delete")!=null){
+        String poll_id = request.getParameter("poll_id");
+        PollDaoImpl pollDaoimpl = new PollDaoImpl();
+        Poll cp = pollDaoimpl.getPoll(poll_id);
+        PrintWriter output = response.getWriter();
+        if(cp.getPoll_status() == Poll.status.created && cp.getVote().isEmpty()){
+            if(pollDaoimpl.deletePoll(poll_id)){
+
+                output.println("successful delete!");
+            }
+        }
+        else{
+            output.println("You can not delete it!");
+        }
+
+    }
+%>
+
+        <%
+
+            int user_id = (int) session.getAttribute("userid");
+            //int user_id = Integer.parseInt(request.getParameter("user_id"));
+            PollDaoImpl pollDao = new PollDaoImpl();
+            Set<Poll> poll_array = pollDao.getAllPoll(user_id);
+            //Poll p = pollDao.getPoll("0000000000");
+
+
+        %>
         <div class="col-md-7 col-lg-8">
             <table id="tbl-student" class="table table-responsive table-bordered" cellpadding = "0" width="100%">
                 <thead>
@@ -119,18 +207,25 @@
                     <th>Poll ID</th>
                 </tr>
                 </thead>
-<%--                <tr>--%>
-<%--                    <td><%=p.getTitle()%> </td>--%>
-<%--                    <td><%=p.getQuestion()%>  </td>--%>
+                <%
+                    for (Poll p : poll_array)
+                    {
 
-<%--                    <td><%=p.getChoice()[0]%></td>--%>
-<%--                    <td><%=p.getChoice()[1]%></td>--%>
-<%--                    <td><%=p.getChoice()[2]%></td>--%>
-<%--                    <td style="color:darkgreen"><%=p.getPoll_status()%> </td>--%>
-<%--                    <td style="color:darkred"><%=p.getId()%></td>--%>
+                %>
+                <tr>
+                    <td><%=p.getTitle()%> </td>
+                    <td><%=p.getQuestion()%> </td>
+                    <td><%=p.getChoice().get(0)%></td>
+                    <td><%=p.getChoice().get(1)%></td>
+                    <td><%=p.getChoice().get(2)%></td>
+                    <td style="color:darkgreen"><%=p.getPoll_status()%> </td>
+                    <td style="color:darkred"><%=p.getId()%></td>
+                </tr>
 
+                <%
 
-
+                    }
+                %>
 
             </table>
 
@@ -143,78 +238,56 @@
                     </form>
                 </td>
                 <td>
+                    <form action="access.jsp" method="post">
+                        <input type="submit" class="btn btn-info" id="access_one" value="Access one" name="access_one">
+                    </form>
+                </td>
+                <td>
                     <form action="update.jsp" method="post">
                         <input type="submit" class="btn btn-info" id="update" value="Update" name="run">
                     </form>
                 </td>
                 <td>
-                    <form action="display.jsp" method="post">
+                    <form action="run.jsp" method="post">
                         <input type="submit" id="run" value="Run" name="run" class="btn btn-info">
                     </form>
                 </td>
 
                 <td>
-                    <form action = "display.jsp" method="post">
+                    <form action = "clear.jsp" method="post">
                         <input type="submit" id="clear" value="Clear" name="clear" class="btn btn-info" >
                     </form>
                 </td>
 
                 <td>
-                    <form action = "display.jsp" method="post">
+                    <form action = "release.jsp" method="post">
                         <input type="submit" id="release" value="Release" name="release" class="btn btn-info" >
                     </form>
                 </td>
 
                 <td>
-                    <form action = "display.jsp" method="post">
+                    <form action = "unrelease.jsp" method="post">
                         <input type="submit" id="unrelease" value="UnRelease" name="unrelease" class="btn btn-info" >
                     </form>
                 </td>
 
                 <td>
-                    <form action = "display.jsp" method="post">
+                    <form action = "close.jsp" method="post">
                         <input type="submit" id="close" value="Close" name="close" class="btn btn-info" >
+                    </form>
+                </td>
+
+                <td>
+                    <form action = "delete.jsp" method="post">
+                        <input type="submit" id="delete" value="Delete" name="delete" class="btn btn-info" >
                     </form>
                 </td>
                 </tr>
             </table>
 
-<%--            <%--%>
-<%--                if(p.getPoll_status() == Poll.status.released){--%>
-<%--                    Enumeration<String> keys = p.get_Poll_Result().keys();--%>
-<%--                    String[] choices = new String[3];--%>
-<%--                    int i =0;--%>
-<%--                    while(keys.hasMoreElements()){--%>
-<%--                        choices[i] = keys.nextElement();--%>
-<%--                        i++;--%>
-<%--                    }--%>
+            <br><br>
 
-<%--            %>--%>
-<%--            <script type="text/javascript">--%>
-<%--                google.charts.load("current", {packages:["corechart"]});--%>
-<%--                google.charts.setOnLoadCallback(drawChart);--%>
-<%--                function drawChart() {--%>
-<%--                    var data = google.visualization.arrayToDataTable([--%>
-<%--                        ['Choices', 'Results'],--%>
-<%--                        ['<%=choices[0]%>',   <%=p.get_Poll_Result().get(choices[0])%>],--%>
-<%--                        ['<%=choices[1]%>',   <%=p.get_Poll_Result().get(choices[1])%>],--%>
-<%--                        ['<%=choices[2]%>',   <%=p.get_Poll_Result().get(choices[2])%>]--%>
-<%--                    ]);--%>
 
-<%--                    var options = {--%>
-<%--                        title: 'The Poll Result',--%>
-<%--                        pieHole: 0.4,--%>
-<%--                    };--%>
-
-<%--                    var chart = new google.visualization.PieChart(document.getElementById('donutchart'));--%>
-<%--                    chart.draw(data, options);--%>
-<%--                }--%>
-<%--            </script>--%>
-<%--            <div id="donutchart" style="width: 900px; height: 500px;"></div>--%>
-
-<%--            <%--%>
-<%--                }--%>
-<%--            %>--%>
 
         </div>
 <div align = "right">

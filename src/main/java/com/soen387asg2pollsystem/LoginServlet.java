@@ -24,6 +24,7 @@ public class LoginServlet extends HttpServlet {
         if(userDao.check(user_id, pass)){
             HttpSession session = request.getSession();//check the uname to avoid display welcome.jsp
             session.setAttribute("userid", user_id);
+
             response.sendRedirect("display.jsp");
         }
         else
