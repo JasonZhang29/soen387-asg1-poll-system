@@ -29,20 +29,20 @@ public class pinServlet extends HttpServlet {
             int index = rand.nextInt(10);
             newPin += index;
         }
-        if(! newPin.equals("")){
-            pollDaoimpl.insertPin(poll_id,newPin);
-            request.setAttribute("newPin",newPin);
-            RequestDispatcher rd = request.getRequestDispatcher("welcome.jsp");
-            rd.forward(request,response);
+        try {
+            if(pollDaoimpl.getPoll(poll_id).getId() != null){
+                pollDaoimpl.insertPin(poll_id,newPin);
+                request.setAttribute("newPin",newPin);
+                RequestDispatcher rd = request.getRequestDispatcher("welcome.jsp");
+                rd.forward(request,response);
 
+            }
+            else{
+                response.sendRedirect("pin.jsp");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        else{
-            response.sendRedirect("pin.jsp");
-        }
-
-
-
-
 
 
     }

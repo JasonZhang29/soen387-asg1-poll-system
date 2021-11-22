@@ -44,7 +44,7 @@
         response.sendRedirect("index.jsp");
     }
 %>
-<h2>Display the current Poll</h2>
+<h2>Display the current Poll(s)</h2>
 
 <%
     if("post".equalsIgnoreCase(request.getMethod()) && request.getParameter("update")!=null){
@@ -171,9 +171,8 @@
         PollDaoImpl pollDaoimpl = new PollDaoImpl();
         Poll cp = pollDaoimpl.getPoll(poll_id);
         PrintWriter output = response.getWriter();
-        if(cp.getPoll_status() == Poll.status.created && cp.getVote().isEmpty()){
+        if(cp.getId() != null && cp.getPoll_status() == Poll.status.created && cp.getVote().isEmpty()){
             if(pollDaoimpl.deletePoll(poll_id)){
-
                 output.println("successful delete!");
             }
         }
@@ -219,7 +218,7 @@
                     <td><%=p.getChoice().get(1)%></td>
                     <td><%=p.getChoice().get(2)%></td>
                     <td style="color:darkgreen"><%=p.getPoll_status()%> </td>
-                    <td style="color:darkred"><%=p.getId()%></td>
+                    <td style="color:darkred"><%=(String)p.getId()%></td>
                 </tr>
 
                 <%

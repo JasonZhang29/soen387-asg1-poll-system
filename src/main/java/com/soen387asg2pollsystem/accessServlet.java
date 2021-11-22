@@ -22,7 +22,7 @@ public class accessServlet extends HttpServlet {
         try{
             Poll p_find = pollDaoimpl.getPoll(poll_id);
             HttpSession session = request.getSession();
-            if(p_find.getId() != ""){
+            if(p_find.getId() != null){
                 session.setAttribute("p_find", p_find);
                 response.sendRedirect("findPoll.jsp");
             }
