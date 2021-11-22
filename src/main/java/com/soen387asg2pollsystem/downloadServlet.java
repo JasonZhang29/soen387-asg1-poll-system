@@ -30,10 +30,10 @@ public class downloadServlet extends HttpServlet {
         try{
             Poll cp = pollDaoimpl.getPoll(poll_id);
             String filename = cp.getTitle();
-            response.setContentType("text/html");
+            //response.setContentType("text/html");
             PrintWriter pw = response.getWriter();
             String new_filename = cp.download_Poll_Details(pw,filename);
-            response.setContentType("APPLICATION/OCTET-STREAM");
+            response.setContentType("application/json");
             response.setHeader("Content-disposition", "attachment;filename="+new_filename);
             pw.close();
 

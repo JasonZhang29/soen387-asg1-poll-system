@@ -68,9 +68,9 @@ public class Poll implements Serializable {
         String[] choices = {letterStr, numStr};
         String newId = "";
         for(int i = 0; i < 10; i++) {
-            //SecureRandom rand = new SecureRandom();
-            //int strIdx = rand.nextInt(2);
-            newId += getRandomChar(choices[1]);
+            SecureRandom rand = new SecureRandom();
+            int strIdx = rand.nextInt(2);
+            newId += getRandomChar(choices[strIdx]);
         }
         this.id = newId;
     }

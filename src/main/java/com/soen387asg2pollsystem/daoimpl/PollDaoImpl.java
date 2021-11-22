@@ -20,11 +20,11 @@ public class PollDaoImpl implements PollDAO{
             Statement stmt = connection.createStatement();
             Statement stmt_c = connection.createStatement();
             Statement stmt_v = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM polls WHERE poll_id=" + poll_id);
-            ResultSet rs_choice = stmt_c.executeQuery("SELECT * FROM choices WHERE poll_id=" + poll_id);
+            ResultSet rs = stmt.executeQuery("SELECT * FROM polls WHERE poll_id='" + poll_id + "'");
+            ResultSet rs_choice = stmt_c.executeQuery("SELECT * FROM choices WHERE poll_id='" + poll_id + "'");
             ResultSet rs_vote = stmt_v.executeQuery("select v.pin, c.choice_context,v.poll_id\n" +
                     "from votes v\n" +
-                    "join choices c on v.choice_id = c.choice_id and c.poll_id = v.poll_id and v.poll_id =" + poll_id);
+                    "join choices c on v.choice_id = c.choice_id and c.poll_id = v.poll_id and v.poll_id ='" + poll_id+ "'");
             Poll poll = new Poll();
             if(rs.next()) {
                 extractPollFromResultSet(poll, rs);
@@ -75,7 +75,8 @@ public class PollDaoImpl implements PollDAO{
             {
                 Poll new_poll = new Poll();
                 extractPollFromResultSet(new_poll, rs);
-                ResultSet rs_choice = stmt_c.executeQuery("SELECT * FROM choices WHERE poll_id=" + new_poll.getId());
+                //System.out.println("SELECT * FROM choices WHERE poll_id=" + new_poll.getId());
+                ResultSet rs_choice = stmt_c.executeQuery("SELECT * FROM choices WHERE poll_id='" + new_poll.getId()+"'");
                 ArrayList<String> new_choices = new ArrayList<>();
                 while (rs_choice.next()){
                     String c1 = rs_choice.getString("choice_context");
@@ -85,7 +86,7 @@ public class PollDaoImpl implements PollDAO{
                 Hashtable<String,String> new_vote = new Hashtable<>();
                 ResultSet rs_vote = stmt_v.executeQuery("select v.pin, c.choice_context,v.poll_id\n" +
                         "from votes v\n" +
-                        "join choices c on v.choice_id = c.choice_id and c.poll_id = v.poll_id and v.poll_id =" + new_poll.getId());
+                        "join choices c on v.choice_id = c.choice_id and c.poll_id = v.poll_id and v.poll_id ='" + new_poll.getId()+"'");
                 while(rs_vote.next()){
                     String pin = rs_vote.getString("pin");
                     String choice = rs_vote.getString("choice_context");
@@ -318,11 +319,11 @@ public class PollDaoImpl implements PollDAO{
 
         try{
             Statement stmt = connection.createStatement();
-            int i = stmt.executeUpdate("DELETE FROM polls WHERE poll_id=" + poll_id);
+            int i = stmt.executeUpdate("DELETE FROM polls WHERE poll_id='" + poll_id + "'");
             Statement stmt_c = connection.createStatement();
-            int j = stmt_c.executeUpdate("DELETE FROM choices WHERE poll_id=" + poll_id);
+            int j = stmt_c.executeUpdate("DELETE FROM choices WHERE poll_id='" + poll_id + "'");
             Statement stmt_v = connection.createStatement();
-            int k = stmt_v.executeUpdate("DELETE FROM votes WHERE poll_id=" + poll_id);
+            int k = stmt_v.executeUpdate("DELETE FROM votes WHERE poll_id='" + poll_id + "'");
 
             if(i == 1 && j == 1 && k==1) {
                 return true;
