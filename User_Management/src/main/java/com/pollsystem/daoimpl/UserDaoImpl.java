@@ -4,8 +4,14 @@ import com.pollsystem.dao.UserDAO;
 import com.pollsystem.db.DBConnection;
 import com.pollsystem.model.User;
 
+import javax.mail.*;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import java.security.SecureRandom;
 import java.sql.*;
 import java.util.HashSet;
+import java.util.Properties;
 import java.util.Set;
 
 public class UserDaoImpl implements UserDAO {
@@ -229,4 +235,53 @@ public class UserDaoImpl implements UserDAO {
         user.setPassword( rs.getString("password") );
         return user;
     }
+
+    @Override
+    public void sendMail(String recipient) {
+        System.out.println("preparing to send email");
+        Properties props = System.getProperties();
+        String host = "smtp.gmail.com";
+        String from = "heliu19850205";
+        String pass = "vifxyz-mazHov-fosve8";
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.ssl.trust", host);
+        props.put("mail.smtp.user", from);
+        props.put("mail.smtp.password", pass);
+        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.required", "true");
+        props.put("mail.smtp.ssl.protocols", "TLSv1.2");
+
+        Session session = Session.getDefaultInstance(props);
+        MimeMessage message = new MimeMessage(session);
+
+        try {
+
+            message.setFrom(new InternetAddress(from));
+            InternetAddress toAddress = new InternetAddress(recipient);
+
+            message.addRecipient(Message.RecipientType.TO, toAddress);
+
+            String subject = "Email Verification from Poll System";
+            message.setSubject(subject);
+
+            String body = "<h1>Hello, Please verify your account:</h1><br/><a href='http://localhost:8080/soen387_asg3_pollsystem_war_exploded/login.jsp'>Link</a>";
+            message.setContent(body,"text/html");
+
+            Transport transport = session.getTransport("smtp");
+
+            transport.connect(host, from, pass);
+            transport.sendMessage(message, message.getAllRecipients());
+            transport.close();
+            System.out.println("Email send successfully");
+        }
+        catch (AddressException ae) {
+            ae.printStackTrace();
+        }
+        catch (MessagingException me) {
+            me.printStackTrace();
+        }
+    }
+
+
 }

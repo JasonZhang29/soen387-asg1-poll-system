@@ -3,6 +3,8 @@
     <output-path>$PROJECT_DIR$/out/artifacts/User_Management_jar</output-path>
     <root id="archive" name="User_Management.jar">
       <element id="module-output" name="User_Management" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/javax/mail/mail/1.5.0-b01/mail-1.5.0-b01.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/javax/activation/activation/1.1/activation-1.1.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

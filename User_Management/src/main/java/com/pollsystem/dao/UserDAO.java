@@ -21,4 +21,10 @@ public interface UserDAO {
     boolean deleteUser(int id);
 
     boolean check(int id, String pass);
+
+    void sendMail(String recepient) throws Exception;
+
+
+
+
 }

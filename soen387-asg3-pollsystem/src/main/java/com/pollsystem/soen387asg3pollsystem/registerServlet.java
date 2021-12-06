@@ -29,7 +29,14 @@ public class registerServlet extends HttpServlet {
         User newUser = new User(user_id, first_name, last_name, email, pass);
         String hash = newUser.doHashing(pass);
         newUser.setPassword(hash);
+        try {
+            userDao.sendMail(email);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         userDao.insertUser(newUser);
+
+
 //        PrintWriter out = response.getWriter();
 //        out.println("Hello to Sq, result =" + hash);
         response.sendRedirect("login.jsp");
