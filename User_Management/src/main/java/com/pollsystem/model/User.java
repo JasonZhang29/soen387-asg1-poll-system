@@ -9,6 +9,8 @@ public class User {
         private String lastName;
         private String email;
         private String password;
+        private String myhash;
+        private int active;
 
 
         public User(){
@@ -59,7 +61,23 @@ public class User {
             this.password = password;
         }
 
-        public String doHashing(String password){
+        public String getMyhash() {
+            return myhash;
+        }
+
+        public void setMyhash(String myhash) {
+            this.myhash = myhash;
+        }
+
+        public int getActive() {
+            return active;
+        }
+
+        public void setActive(int active) {
+            this.active = active;
+        }
+
+    public String doHashing(String password){
             try{
                 MessageDigest md = MessageDigest.getInstance("MD5");
                 md.update(password.getBytes());
@@ -77,6 +95,8 @@ public class User {
             }
             return "";
         }
+
+
 
     @Override
     public String toString() {

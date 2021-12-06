@@ -98,7 +98,7 @@ public class UserDaoImpl implements UserDAO {
         Connection connection = DBConnection.getConnection();
 
         try {
-            String query = "INSERT INTO users (user_id,first_name,last_name,email,password) VALUES (?, ?, ?, ?, ?)";
+            String query = "INSERT INTO users (user_id,first_name,last_name,email,password,hash) VALUES (?, ?, ?, ?, ?, ?)";
             // Passing Statement.RETURN_GENERATED_KEYS to make getGeneratedKeys() work
             PreparedStatement ps = connection.prepareStatement(query);
 
@@ -107,11 +107,14 @@ public class UserDaoImpl implements UserDAO {
             ps.setString(3, user.getLastName());
             ps.setString(4, user.getEmail());
             ps.setString(5, user.getPassword());
+            ps.setString(6, user.getMyhash());
 
             ps.executeUpdate();
             int i = ps.executeUpdate();
 
-            if(i == 1) {
+            if(i != 0) {
+                //this.sendMail(user.getEmail(), user.getMyhash());
+                System.out.println("success!!!");
                 return true;
             }
 
@@ -205,9 +208,13 @@ public class UserDaoImpl implements UserDAO {
             ps.setString(2, hash);
             ResultSet rs = ps.executeQuery();
 
+
             if(rs.next())
             {
-                return true;
+                int active = rs.getInt("active");
+                if(active == 1){
+                    return true;
+                }
             }
 
         }
@@ -233,11 +240,13 @@ public class UserDaoImpl implements UserDAO {
         user.setLastName( rs.getString("last_name") );
         user.setEmail( rs.getString("email"));
         user.setPassword( rs.getString("password") );
+        user.setMyhash(rs.getString("hash"));
+        user.setActive(rs.getInt("active"));
         return user;
     }
 
     @Override
-    public void sendMail(String recipient) {
+    public boolean sendMail(String recipient, String myhash) {
         System.out.println("preparing to send email");
         Properties props = System.getProperties();
         String host = "smtp.gmail.com";
@@ -265,7 +274,8 @@ public class UserDaoImpl implements UserDAO {
             String subject = "Email Verification from Poll System";
             message.setSubject(subject);
 
-            String body = "<h1>Hello, Please verify your account:</h1><br/><a href='http://localhost:8080/soen387_asg3_pollsystem_war_exploded/login.jsp'>Link</a>";
+            String body = "<h1>Hello, Please verify your account:</h1><br/><a href='http://localhost:8080/soen387_asg3_pollsystem_war_exploded/ActivateAccount?key1="+
+                    recipient+"&key2="+myhash+"'>Link</a>";
             message.setContent(body,"text/html");
 
             Transport transport = session.getTransport("smtp");
@@ -274,13 +284,11 @@ public class UserDaoImpl implements UserDAO {
             transport.sendMessage(message, message.getAllRecipients());
             transport.close();
             System.out.println("Email send successfully");
-        }
-        catch (AddressException ae) {
+            return true;
+        } catch (MessagingException ae) {
             ae.printStackTrace();
         }
-        catch (MessagingException me) {
-            me.printStackTrace();
-        }
+        return false;
     }
 
 
