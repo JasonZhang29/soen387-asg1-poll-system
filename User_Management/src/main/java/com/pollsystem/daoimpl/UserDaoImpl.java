@@ -251,7 +251,7 @@ public class UserDaoImpl implements UserDAO {
         Properties props = System.getProperties();
         String host = "smtp.gmail.com";
         String from = "heliu19850205";
-        String pass = "vifxyz-mazHov-fosve8";
+        String pass = "8888888888";
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.ssl.trust", host);
         props.put("mail.smtp.user", from);
