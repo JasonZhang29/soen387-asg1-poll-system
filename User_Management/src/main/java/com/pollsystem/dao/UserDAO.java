@@ -22,7 +22,7 @@ public interface UserDAO {
 
     boolean check(int id, String pass);
 
-    boolean sendMail(String recepient, String myhash) throws Exception;
+    boolean sendMail(String recepient, String myhash, int aim) throws Exception;
 
 
 

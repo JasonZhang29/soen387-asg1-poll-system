@@ -25,7 +25,7 @@
 <body>
 <div id="header"></div>
 <h1>Thank you !</h1>
-<h3>For Registration, Please Check Your</h3>
+<h3>Please Check Your</h3>
 <h3>Email For Verification Link</h3>
 <div style="text-align:right">
     <p><a href="index.jsp">Back</a> </p>

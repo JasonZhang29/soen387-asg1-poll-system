@@ -47,7 +47,7 @@
 
     <%--back button--%>
     <div style="text-align:right">
-        <p><a href="index.jsp">Back</a> </p>
+        <p><a href="login.jsp">Back</a> </p>
     </div>
 </main>
 </body>

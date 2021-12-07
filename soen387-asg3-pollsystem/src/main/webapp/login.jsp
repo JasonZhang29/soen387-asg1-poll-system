@@ -31,7 +31,9 @@
             <input type="password" class="form-control" id="pass" name="pass" placeholder="password" required><br>
         </div>
         <input class="w-100 btn btn-lg btn-primary" type="submit" value="login">
-        <a href="signup.jsp">Register a manager</a>
+        <a href="signup.jsp">Register a manager</a><br>
+        <a href="forgot.jsp">Forgot Password</a><br>
+        <a href="change.jsp">Change Password</a>
     </form>
 <%--back button--%>
     <div style="text-align:right">

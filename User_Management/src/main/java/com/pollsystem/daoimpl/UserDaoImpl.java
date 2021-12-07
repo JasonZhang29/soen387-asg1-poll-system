@@ -139,13 +139,15 @@ public class UserDaoImpl implements UserDAO {
         Connection connection = DBConnection.getConnection();
 
         try {
-            PreparedStatement ps = connection.prepareStatement("UPDATE users SET first_name=?, last_name=?, email=?, password=? WHERE user_id=?");
+            PreparedStatement ps = connection.prepareStatement("UPDATE users SET first_name=?, last_name=?, email=?, password=?, hash=?, active=?  WHERE user_id=?");
 
             ps.setString(1, user.getFirstName());
             ps.setString(2, user.getLastName());
             ps.setString(3, user.getEmail());
             ps.setString(4, user.getPassword());
-            ps.setInt(5,user.getUserId());
+            ps.setString(5, user.getMyhash());
+            ps.setInt(6, user.getActive());
+            ps.setInt(7,user.getUserId());
 
             int i = ps.executeUpdate();
 
@@ -246,12 +248,12 @@ public class UserDaoImpl implements UserDAO {
     }
 
     @Override
-    public boolean sendMail(String recipient, String myhash) {
+    public boolean sendMail(String recipient, String myhash, int aim) {
         System.out.println("preparing to send email");
         Properties props = System.getProperties();
         String host = "smtp.gmail.com";
-        String from = "************";
-        String pass = "8888888888";
+        String from = "-";
+        String pass = "=";
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.ssl.trust", host);
         props.put("mail.smtp.user", from);
@@ -273,9 +275,17 @@ public class UserDaoImpl implements UserDAO {
 
             String subject = "Email Verification from Poll System";
             message.setSubject(subject);
+            String body;
+            if(aim == 0){
+                body = "<h1>Hello, Please verify your account:</h1><br/><a href='http://localhost:8080/soen387_asg3_pollsystem_war_exploded/ActivateAccount?key1="+
+                        recipient+"&key2="+myhash+"'>Link</a>";
+            }
+            else{
+                body = "<h1>Hello, Please change your password:</h1><br/><a href='http://localhost:8080/soen387_asg3_pollsystem_war_exploded/ResetPassword?key1="+
+                        recipient+"&key2="+myhash+"'>Link</a>";
+            }
 
-            String body = "<h1>Hello, Please verify your account:</h1><br/><a href='http://localhost:8080/soen387_asg3_pollsystem_war_exploded/ActivateAccount?key1="+
-                    recipient+"&key2="+myhash+"'>Link</a>";
+
             message.setContent(body,"text/html");
 
             Transport transport = session.getTransport("smtp");
